@@ -43,7 +43,7 @@ void AC01_BeginOverlap::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherAct
 	str.Append("In : ");
 	str.Append(OtherActor->GetName());
 
-	TextRender->Text = FText::FromString(str);
+	TextRender->SetText(FText::FromString(str));
 }
 
 void AC01_BeginOverlap::OnEndOverlap(AActor* OverlappedActor, AActor* OtherActor)
@@ -53,6 +53,6 @@ void AC01_BeginOverlap::OnEndOverlap(AActor* OverlappedActor, AActor* OtherActor
 	str.Append(OtherActor->GetName());
 	// Append : str 뒤에 문자열을 잇습니다.
 	// GetName : 월드 아웃라이너의 이름을 가져옵니다.
-	TextRender->Text = FText::FromString(str);
+	TextRender->SetText(FText::FromString(str));
 }
 

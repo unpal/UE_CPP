@@ -19,7 +19,7 @@ class UE_CPP_API ACPlayer : public ACharacter
 		// 을 기본적으로 가지고 있는 클래스입니다.
 public:
 	ACPlayer();
-
+		
 protected:
 	virtual void BeginPlay() override;
 

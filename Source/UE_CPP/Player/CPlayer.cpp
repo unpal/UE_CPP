@@ -33,8 +33,10 @@ ACPlayer::ACPlayer()
 	// SpringArm 의 길이를 200으로 설정
 	SpringArm->bUsePawnControlRotation = true;
 	// SpringArm이 컨트롤러의 회전값을 사용하도록 설정합니다
-	SpringArm->SocketOffset = FVector(0, 60, 0);
+	SpringArm->SocketOffset = FVector(0, 0, 60);
 	// SpringArm 의 시작지점의 y위치를 60 으로 설정합니다
+
+	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
 
 void ACPlayer::BeginPlay()
