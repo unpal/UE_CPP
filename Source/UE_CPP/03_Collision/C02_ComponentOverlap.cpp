@@ -39,7 +39,7 @@ void AC02_ComponentOverlap::BeginPlay()
 
 void AC02_ComponentOverlap::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-
+	
 	PointLight->SetVisibility(true);
 
 }
@@ -48,9 +48,6 @@ void AC02_ComponentOverlap::OnEndOverlap(UPrimitiveComponent* OverlappedComponen
 {
 	PointLight->SetVisibility(false);
 	FLinearColor Color;
-	Color.R = UKismetMathLibrary::RandomFloatInRange(0, 1);
-	Color.G = UKismetMathLibrary::RandomFloatInRange(0, 1);
-	Color.B = UKismetMathLibrary::RandomFloatInRange(0, 1);
 	PointLight->SetLightColor(FLinearColor(UKismetMathLibrary::RandomFloatInRange(0, 1), UKismetMathLibrary::RandomFloatInRange(0, 1), UKismetMathLibrary::RandomFloatInRange(0, 1)));
 }
 

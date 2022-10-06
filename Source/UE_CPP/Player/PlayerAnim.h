@@ -19,6 +19,6 @@ private:
 	class ACharacter* Owner;
 public:
 	virtual void NativeBeginPlay() override;
-	virtual void NativeUpdateAnimation(float DelatSeonds) override;
+	virtual void NativeUpdateAnimation(float DelatSeconds) override;
 
 };

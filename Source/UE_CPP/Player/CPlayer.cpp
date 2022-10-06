@@ -26,7 +26,12 @@ ACPlayer::ACPlayer()
 	if (mesh.Succeeded()) GetMesh()->SetSkeletalMesh(mesh.Object);
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
-
+	// FClassFinder : class , blueprint 형식을 찾아줍니다
+	ConstructorHelpers::FClassFinder<UAnimInstance> anim(L"AnimBlueprint'/Game/Blueprints/Player/ABP_Player.ABP_Player_C'");
+	if (anim.Succeeded()) GetMesh()->SetAnimClass(anim.Class);
+	
+	
+	
 	SpringArm->SetRelativeLocation(FVector(0, 0, 60));
 	// SpringArm 의 z 위치를 60으로 설정합니다.
 	SpringArm->TargetArmLength = 200;
@@ -37,6 +42,7 @@ ACPlayer::ACPlayer()
 	// SpringArm 의 시작지점의 y위치를 60 으로 설정합니다
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
+	
 }
 
 void ACPlayer::BeginPlay()
@@ -55,6 +61,9 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACPlayer::OnMoveRight);
 	PlayerInputComponent->BindAxis("HorizontalLook", this, &ACPlayer::OnHorizontalLook);
 	PlayerInputComponent->BindAxis("verticalLook", this, &ACPlayer::OnVerticalLook);
+
+	PlayerInputComponent->BindAction("Run",EInputEvent::IE_Pressed, this, &ACPlayer::Run);
+	PlayerInputComponent->BindAction("Run",EInputEvent::IE_Released, this, &ACPlayer::Walk);
 }
 
 void ACPlayer::OnMoveForward(float axis)
@@ -80,4 +89,16 @@ void ACPlayer::OnHorizontalLook(float axis)
 
 void ACPlayer::OnVerticalLook(float axis)
 {	AddControllerPitchInput(axis);	}
+
+void ACPlayer::Run()
+{
+	//이동속도 600
+	GetCharacterMovement()->MaxWalkSpeed = 600;
+}
+
+void ACPlayer::Walk()
+{
+	//이동속도 400
+	GetCharacterMovement()->MaxWalkSpeed = 400;
+}
 

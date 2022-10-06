@@ -6,11 +6,13 @@
 void UPlayerAnim::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
+
+	Owner = Cast<ACharacter>(TryGetPawnOwner());
 }
 
-void UPlayerAnim::NativeUpdateAnimation(float DelatSeonds)
+void UPlayerAnim::NativeUpdateAnimation(float DelatSeconds)
 {
-	Super::NativeUpdateAnimation(DelatSeonds);
+	Super::NativeUpdateAnimation(DelatSeconds);
 
 	if (!Owner) return;
 	
