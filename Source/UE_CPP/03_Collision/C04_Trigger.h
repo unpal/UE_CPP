@@ -28,6 +28,7 @@ private:
 		class  USpotLightComponent* SpotLights[3];
 	class UMaterialInstanceDynamic* Materials[3];
 	FVector WorldLocations[3]; // 초기에 설정되어 있던 상자들의 위치값 저장 변수
+	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 			AActor* OtherActor,
 			UPrimitiveComponent* OtherComp,
