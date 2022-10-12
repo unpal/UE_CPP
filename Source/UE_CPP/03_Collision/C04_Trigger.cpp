@@ -28,7 +28,7 @@ AC04_Trigger::AC04_Trigger()
 	TextRender->HorizontalAlignment = EHorizTextAligment::EHTA_Center;
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh> mesh(L"StaticMesh'/Game/Mesh/SM_Cube.SM_Cube'");
-
+	
 	if (mesh.Succeeded())
 	{
 		for (int32 i = 0; i < 3; i++)
@@ -63,7 +63,7 @@ AC04_Trigger::AC04_Trigger()
 void AC04_Trigger::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	Box->OnComponentBeginOverlap.AddDynamic(this, &AC04_Trigger::OnBeginOverlap);
 
 	UMaterialInstanceConstant* material = Cast<UMaterialInstanceConstant>(StaticLoadObject(UMaterialInstanceConstant::StaticClass(), NULL, L"MaterialInstanceConstant'/Game/Materials/M_Mesh_Inst.M_Mesh_Inst'"));
@@ -88,6 +88,14 @@ void AC04_Trigger::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 	color.G = UKismetMathLibrary::RandomFloatInRange(0, 1);
 	color.B = UKismetMathLibrary::RandomFloatInRange(0, 1);
 	color.A = 1.0f;
+
+	// IsBound() : 대리자에게 추가되어 있는 함수가 있는지 확인합니다.
+	//             추가되어 있는 함수가 존재한다면 true 아니라면 false 를 반환합니다.
+	if (OnMultiBeginOverlap.IsBound())
+	{
+		// OnMultiBeginOverlap 에 추가되어 있는 모든 함수를 실행합니다.
+		OnMultiBeginOverlap.Broadcast(index, color);
+	}
 
 	OnPhysics(index, color);
 	OnLight(index, color);
@@ -115,3 +123,5 @@ void AC04_Trigger::OnLight(int32 index, FLinearColor color)
 
 	SpotLights[index]->SetLightColor(color);
 }
+
+

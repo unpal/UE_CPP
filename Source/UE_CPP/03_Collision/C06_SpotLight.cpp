@@ -1,14 +1,13 @@
-
-
 #include "03_Collision/C06_SpotLight.h"
 #include "Components/SceneComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/TextRenderComponent.h"
-#include "Components/StaticMeshComponent.h"
-#include "Materials/MaterialInstanceConstant.h"
-#include "Materials/MaterialInstanceDynamic.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/SpotLightComponent.h"
+#include "Kismet/GameplayStatics.h" 
+#include "C04_Trigger.h"
+
+
 AC06_SpotLight::AC06_SpotLight()
 {
 	Root = CreateDefaultSubobject<USceneComponent>("Root");
@@ -27,6 +26,7 @@ AC06_SpotLight::AC06_SpotLight()
 	TextRender->TextRenderColor = FColor::Black;
 	TextRender->Text = FText::FromString(FString("C06_SpotLight"));
 	TextRender->HorizontalAlignment = EHorizTextAligment::EHTA_Center;
+
 	for (int32 i = 0; i < 3; i++)
 	{
 		FString str;
@@ -37,14 +37,25 @@ AC06_SpotLight::AC06_SpotLight()
 
 		SpotLights[i]->SetRelativeLocation(FVector(250, i * 150, 250));
 		SpotLights[i]->SetRelativeRotation(FRotator(-90, 0, 0));
-		SpotLights[i]->Intensity = 1e+5f;   // 밝기를 10만으로 설정합니다.
-		SpotLights[i]->OuterConeAngle = 25; // 원뿔의 각도를 25도로 설정합니다.
+		SpotLights[i]->Intensity = 1e+5f;   
+		SpotLights[i]->OuterConeAngle = 25; 
 	}
 }
 
 void AC06_SpotLight::BeginPlay()
 {
 	Super::BeginPlay();
+
+	TArray<AActor*> actors;
+
+	UGameplayStatics::GetAllActorsOfClass(
+		GetWorld(),
+		AC04_Trigger::StaticClass(), actors);
+
+	AC04_Trigger* trigger = Cast<AC04_Trigger>(actors[0]);
+
+	trigger->OnMultiBeginOverlap.AddUFunction(this, "OnLight");
+	
 	Box->OnComponentBeginOverlap.AddDynamic(this, &AC06_SpotLight::OnBeginOverlap);
 }
 
@@ -67,6 +78,5 @@ void AC06_SpotLight::OnLight(int32 index, FLinearColor color)
 
 	SpotLights[index]->SetLightColor(color);
 }
-
 
 

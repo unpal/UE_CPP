@@ -1,5 +1,3 @@
-
-
 #include "03_Collision/C05_Box.h"
 #include "Components/SceneComponent.h"
 #include "Components/BoxComponent.h"
@@ -8,6 +6,11 @@
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h" 
+// GameplayStatics.h : 게임 플레이의 진행 상황을 확인할 수 있는 함수들이 모여있는 파일입니다.
+
+#include "C04_Trigger.h"
+
 AC05_Box::AC05_Box()
 {
 	Root = CreateDefaultSubobject<USceneComponent>("Root");
@@ -38,18 +41,31 @@ AC05_Box::AC05_Box()
 			str.Append(FString::FromInt(i + 1));
 			Meshes[i] = CreateDefaultSubobject<UStaticMeshComponent>(FName(str));
 			Meshes[i]->SetupAttachment(Root);
-			// SetSimulatePhysics : 물리를 가동시킵니다.
 			Meshes[i]->SetSimulatePhysics(true);
 			Meshes[i]->SetRelativeLocation(FVector(250, i * 150, 250));
 			Meshes[i]->SetStaticMesh(mesh.Object);
 		}
 	}
-
 }
 
 void AC05_Box::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	TArray<AActor*> actors; // Actor 를 저장할 배열을 선언합니다.
+
+	UGameplayStatics::GetAllActorsOfClass(
+		GetWorld(),
+		AC04_Trigger::StaticClass(), actors);
+	// UGameplayStatics::GetAllActorsOfClass(world, class, actorArray)
+	// world 에 존재하는 class 로 이루어진 Actor 들을 찾아 
+	// actorArray 에 모두 저장합니다.
+
+	AC04_Trigger* trigger = Cast<AC04_Trigger>(actors[0]);
+
+	trigger->OnMultiBeginOverlap.AddUFunction(this, "OnPhysics");
+	// AC04_Trigger 에 존재하는 OnMultiBeginOverlap 대리자에게
+	// OnPysics 라는 함수를 대신 호출하도록 추가합니다.
 
 	Box->OnComponentBeginOverlap.AddDynamic(this, &AC05_Box::OnBeginOverlap);
 
@@ -61,12 +77,11 @@ void AC05_Box::BeginPlay()
 		Meshes[i]->SetMaterial(0, Materials[i]);
 		Meshes[i]->SetSimulatePhysics(false);
 
-		// GetComponentToWorld : 월드에 존재하는 컴포넌트 좌표계를 가져옵니다.
 		FTransform transform = Meshes[i]->GetComponentToWorld();
 		WorldLocations[i] = transform.GetLocation();
 	}
+	
 }
-
 
 void AC05_Box::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -76,6 +91,7 @@ void AC05_Box::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 	color.G = UKismetMathLibrary::RandomFloatInRange(0, 1);
 	color.B = UKismetMathLibrary::RandomFloatInRange(0, 1);
 	color.A = 1.0f;
+
 	OnPhysics(index, color);
 }
 
@@ -93,5 +109,3 @@ void AC05_Box::OnPhysics(int32 index, FLinearColor color)
 
 	Meshes[index]->SetSimulatePhysics(true);
 }
-
-

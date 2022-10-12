@@ -1,8 +1,11 @@
-#include "03_Collision/C03_OverlapAndHit.h"
+
+
+#include "04_Particle/C02_PaticleTrigger.h"
 #include "Components/BoxComponent.h"
 #include "Components/TextRenderComponent.h"
-
-AC03_OverlapAndHit::AC03_OverlapAndHit()
+#include "C01_Particle.h"
+#include "Kismet/GamePlayStatics.h"
+AC02_PaticleTrigger::AC02_PaticleTrigger()
 {
 	Root = CreateDefaultSubobject<USceneComponent>("Root");
 	SetRootComponent(Root);
@@ -18,27 +21,20 @@ AC03_OverlapAndHit::AC03_OverlapAndHit()
 	TextRender->SetRelativeRotation(FRotator(0));
 	TextRender->SetRelativeScale3D(FVector(2));
 	TextRender->TextRenderColor = FColor::Black;
-	TextRender->Text = FText::FromString(FString("C03_Hit"));
+	TextRender->Text = FText::FromString(FString("C02_ParticleTrigger"));
 	TextRender->HorizontalAlignment = EHorizTextAligment::EHTA_Center;
+
 }
 
-void AC03_OverlapAndHit::BeginPlay()
+void AC02_PaticleTrigger::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Box->OnComponentHit.AddDynamic(this, &AC03_OverlapAndHit::OnHit);
+	TArray<AActor*> actors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC01_Particle::StaticClass(), actors);
+	AC01_Particle* particle = Cast<AC01_Particle>(actors[0]);
+		OnActorBeginOverlap.AddDynamic(particle, &AC01_Particle::ActorBeginOverlap);
+}		
 
-}
-
-void AC03_OverlapAndHit::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-{
-	FString str;
-
-	str.Append("Hit : " + OtherActor->GetName());
-	str.Append(" / ");
-	str.Append(FString::FromInt(++HitCount));
-
-	TextRender->SetText(str);
-}
 
 

@@ -1,21 +1,21 @@
-
-
 #include "Player/PlayerAnim.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+
 void UPlayerAnim::NativeBeginPlay()
 {
-	Super::NativeBeginPlay();
+    Super::NativeBeginPlay();
 
-	Owner = Cast<ACharacter>(TryGetPawnOwner());
+    Owner = Cast<ACharacter>(TryGetPawnOwner());
 }
 
 void UPlayerAnim::NativeUpdateAnimation(float DelatSeconds)
 {
-	Super::NativeUpdateAnimation(DelatSeconds);
+    Super::NativeUpdateAnimation(DelatSeconds);
 
-	if (!Owner) return;
-	
-	Speed = Owner->GetVelocity().Size2D();
-	Direction = CalculateDirection(Owner->GetVelocity(), Owner->GetControlRotation());
+    if (!Owner) return;
+
+    // GetVelocity() : ¼Ó·Â
+    Speed = Owner->GetVelocity().Size2D();
+    Direction = CalculateDirection(Owner->GetVelocity(), Owner->GetControlRotation());
 }

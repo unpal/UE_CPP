@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -15,7 +14,4 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
-public:	
-
 };
