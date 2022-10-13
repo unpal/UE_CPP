@@ -48,6 +48,8 @@ ACPlayer::ACPlayer()
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 	// 해당 캐릭터가 플레이어라는 것을 설정합니다.
+	JumpMaxCount = 2;
+	GetCharacterMovement()->AirControl = 1;
 }
 
 void ACPlayer::BeginPlay()
@@ -66,7 +68,8 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Run", EInputEvent::IE_Pressed, this, &ACPlayer::Run);
 	PlayerInputComponent->BindAction("Run", EInputEvent::IE_Released,this, &ACPlayer::Walk);
-
+	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &ACPlayer::StartJump);
+	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Released, this, &ACPlayer::EndJump);
 }
 
 void ACPlayer::OnMoveForward(float axis)
@@ -103,7 +106,16 @@ void ACPlayer::Run()
 
 void ACPlayer::Walk()
 {
-	// 캐릭터 이동속도를 400으로 설정
 	GetCharacterMovement()->MaxWalkSpeed = 400;
+}
+
+void ACPlayer::StartJump()
+{
+	bPressedJump = true;
+}
+
+void ACPlayer::EndJump()
+{
+	bPressedJump = false;
 }
 

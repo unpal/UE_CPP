@@ -20,8 +20,9 @@ protected :
 
 private :
 	class ACharacter* Owner;
-
 public :
 	virtual void NativeBeginPlay() override;
 	virtual void NativeUpdateAnimation(float DelatSeconds) override;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		bool IsInAir;
 };

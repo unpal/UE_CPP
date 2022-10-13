@@ -45,4 +45,8 @@ private :
 
 	void Run();
 	void Walk();
+	UFUNCTION()
+		void StartJump();
+	UFUNCTION()
+		void EndJump();
 };
