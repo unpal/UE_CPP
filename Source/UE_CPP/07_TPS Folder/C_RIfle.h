@@ -22,7 +22,7 @@ public:
 
 	UFUNCTION()
 		void zooming(float Output);
-	static AC_RIfle* Spawn(class UWorld* InWorld, class ACharater* InOwner);
+	static AC_RIfle* Spawn(class UWorld* InWorld, class ACharacter* InOwner);
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Socket")
 		FName HolsterSocket = "Holster_Rifle";

@@ -18,6 +18,12 @@ protected :
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
 		float Direction;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
+		bool bAiming;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
+		float Pitch;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
+		bool bEquipped;
 private :
 	class ACharacter* Owner;
 public :

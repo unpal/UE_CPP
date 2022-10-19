@@ -2,6 +2,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/InputComponent.h"
+#include "07_TPS Folder/IRifle.h"
 void UPlayerAnim::NativeBeginPlay()
 {
     Super::NativeBeginPlay();
@@ -19,4 +20,12 @@ void UPlayerAnim::NativeUpdateAnimation(float DelatSeconds)
     Speed = Owner->GetVelocity().Size2D();
     Direction = CalculateDirection(Owner->GetVelocity(), Owner->GetControlRotation());
 	IsInAir = Owner->GetCharacterMovement()->IsFalling();
+
+	IIRifle* rifle = Cast<IIRifle>(Owner);
+	if(rifle)
+	{
+		bEquipped = rifle->Get_Equip_Rifle();
+		bAiming = rifle->Get_Aim_Rifle();
+	}
+	Pitch = Owner->GetBaseAimRotation().Pitch;
 }

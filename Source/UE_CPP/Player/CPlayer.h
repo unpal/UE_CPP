@@ -2,10 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "07_TPS Folder/IRifle.h"
 #include "CPlayer.generated.h"
-
 UCLASS()
-class UE_CPP_API ACPlayer : public ACharacter
+class UE_CPP_API ACPlayer : public ACharacter ,public IIRifle
 {
 	// ACharacter  
 	// SkeltealMeshComponent : 뼈대 메쉬 기능
@@ -26,6 +26,14 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
 	// Player 를 보여줄 수 있도록 Camera 를 추가합니다.
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+		TSubclassOf<class UC_UserWidget> AutoFireClass;
+	UPROPERTY(EditDefaultsOnly, Category = "Zoom")
+		float ZoomSpeed = 1000;
+	UPROPERTY(EditDefaultsOnly, Category = "Zoom")
+		FVector2D ZoomRange = FVector2D(0, 500);
+	class AC_RIfle* Rifle;
+	class UC_UserWidget* AutoFire;
 
 public:
 	ACPlayer();
@@ -42,6 +50,7 @@ private :
 
 	void OnHorizontalLook(float axis); 
 	void OnVerticalLook(float axis);
+	void OnZoom(float axis);
 
 	void Run();
 	void Walk();
@@ -49,4 +58,23 @@ private :
 		void StartJump();
 	UFUNCTION()
 		void EndJump();
+
+	void OnRifle_Equip();
+
+	void OnAim();
+	void OffAim();
+
+
+	void OnFire();
+	void OffFire();
+
+	void OnAutoFire();
+private:
+	virtual void Begin_Equip_Rifle()	override;
+	virtual void End_Equip_Rifle()		override;
+	virtual void Begin_UnEquip_Rifle()	override;
+	virtual void End_UnEquip_Rifle()	override;
+	virtual bool Get_Equip_Rifle()		override;
+	virtual bool Get_Aim_Rifle()		override;
+
 };

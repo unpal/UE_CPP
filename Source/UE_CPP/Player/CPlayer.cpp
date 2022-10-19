@@ -10,6 +10,8 @@
 
 #include "Camera/CameraComponent.h"
 
+#include "07_TPS Folder/C_Rifle.h"
+#include "07_TPS Folder/C_UserWidget.h"
 
 ACPlayer::ACPlayer()
 {
@@ -50,11 +52,20 @@ ACPlayer::ACPlayer()
 	// 해당 캐릭터가 플레이어라는 것을 설정합니다.
 	JumpMaxCount = 2;
 	GetCharacterMovement()->AirControl = 1;
+
+	ConstructorHelpers::FClassFinder<UC_UserWidget> autofire(L"WidgetBlueprint'/Game/Blueprints/07_TPS/BP_UserWidget.BP_UserWidget_C'");
+	if (autofire.Succeeded()) AutoFireClass = autofire.Class;
+
+	 
 }
 
 void ACPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+	AutoFire = CreateWidget<UC_UserWidget, APlayerController>(GetController<APlayerController>(), AutoFireClass);
+	AutoFire->AddToViewport();
+
+	Rifle = AC_RIfle::Spawn(GetWorld(), this);
 }
 
 void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -65,11 +76,17 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("MoveRight",      this, &ACPlayer::OnMoveRight);
 	PlayerInputComponent->BindAxis("HorizontalLook", this, &ACPlayer::OnHorizontalLook);
 	PlayerInputComponent->BindAxis("VerticalLook",   this, &ACPlayer::OnVerticalLook);
+	PlayerInputComponent->BindAxis("Zoom",			 this, &ACPlayer::OnZoom);
 
 	PlayerInputComponent->BindAction("Run", EInputEvent::IE_Pressed, this, &ACPlayer::Run);
 	PlayerInputComponent->BindAction("Run", EInputEvent::IE_Released,this, &ACPlayer::Walk);
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &ACPlayer::StartJump);
-	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Released, this, &ACPlayer::EndJump);
+	PlayerInputComponent->BindAction("Rifle", EInputEvent::IE_Pressed, this, &ACPlayer::OnRifle_Equip);
+	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Pressed, this, &ACPlayer::OnAim);
+	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Released, this, &ACPlayer::OffAim);
+	PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &ACPlayer::OnFire);
+	PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Released, this, &ACPlayer::OffFire);
+	PlayerInputComponent->BindAction("AutoFire", EInputEvent::IE_Pressed, this, &ACPlayer::OnAutoFire);
 }
 
 void ACPlayer::OnMoveForward(float axis)
@@ -98,6 +115,13 @@ void ACPlayer::OnHorizontalLook(float axis)
 void ACPlayer::OnVerticalLook(float axis)
 { AddControllerPitchInput(axis); }
 
+void ACPlayer::OnZoom(float axis)
+{
+	SpringArm->TargetArmLength += (ZoomSpeed * axis * GetWorld()->GetDeltaSeconds());
+	SpringArm->TargetArmLength  = FMath::Clamp(SpringArm->TargetArmLength,ZoomRange.X,ZoomRange.Y);
+
+}
+
 void ACPlayer::Run()
 {
 	// 캐릭터 이동속도를 600으로 설정
@@ -117,5 +141,57 @@ void ACPlayer::StartJump()
 void ACPlayer::EndJump()
 {
 	bPressedJump = false;
+}
+
+void ACPlayer::OnRifle_Equip()
+{ Rifle->Equip(); }
+
+void ACPlayer::OnAim()
+{ Rifle->Begin_Aim(); }
+
+void ACPlayer::OffAim()
+{ Rifle->End_Aim(); }
+
+void ACPlayer::OnFire()
+{ Rifle->Begin_Fire(); }
+
+void ACPlayer::OffFire()
+{ Rifle->End_Fire(); }
+
+void ACPlayer::OnAutoFire()
+{
+	Rifle->ToggleAutoFire();
+	Rifle->GetAutoFire() ? AutoFire->On() : AutoFire->Off();
+}
+
+void ACPlayer::End_Equip_Rifle()
+{
+	Rifle->End_Equip();
+}
+
+void ACPlayer::Begin_UnEquip_Rifle()
+{
+	Rifle->Begin_UnEquip();
+}
+
+void ACPlayer::End_UnEquip_Rifle()
+{
+	Rifle->End_UnEquip();
+
+}
+
+bool ACPlayer::Get_Equip_Rifle()
+{
+    return false;
+}
+
+bool ACPlayer::Get_Aim_Rifle()
+{
+    return false;
+}
+
+void ACPlayer::Begin_Equip_Rifle()
+{
+	Rifle->Begin_Equip();
 }
 

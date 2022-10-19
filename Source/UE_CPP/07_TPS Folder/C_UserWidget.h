@@ -9,5 +9,10 @@ UCLASS()
 class UE_CPP_API UC_UserWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void On();
+	UFUNCTION(BlueprintImplementableEvent)
+	void Off();
+
 };

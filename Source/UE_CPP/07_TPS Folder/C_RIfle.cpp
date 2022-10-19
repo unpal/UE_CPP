@@ -81,7 +81,7 @@ void AC_RIfle::zooming(float Output)
 {
 }
 
-AC_RIfle* AC_RIfle::Spawn(UWorld* InWorld, ACharater* InOwner)
+AC_RIfle* AC_RIfle::Spawn(UWorld* InWorld, ACharacter* InOwner)
 {
 	return nullptr;
 }
