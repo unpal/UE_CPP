@@ -23,6 +23,7 @@ private :
 		class UTextRenderComponent* TextRender;
 	// TextRenderComponent : 텍스트를 그려주는 기능
 
+
 public:	
 	AC01_BeginOverlap();
 

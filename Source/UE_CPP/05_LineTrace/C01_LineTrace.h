@@ -8,24 +8,24 @@ UCLASS()
 class UE_CPP_API AC01_LineTrace : public AActor
 {
 	GENERATED_BODY()
-
-private:
+	
+private :	
 	UPROPERTY(VisibleDefaultsOnly)
 		class UTextRenderComponent* TextRender;
 
-public:
+public:	
 	AC01_LineTrace();
 
 protected:
 	virtual void BeginPlay() override;
 
-public:
+public:	
 	virtual void Tick(float DeltaTime) override;
 
-private:
+private :
 	void StartJump(class AActor* InActor);
 
-private:
+private :
 	TArray<class AC02_Cylinder*> Cylinders;
 	TArray<AActor*> IgnoreActors;
 

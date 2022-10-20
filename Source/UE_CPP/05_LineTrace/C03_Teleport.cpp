@@ -1,9 +1,8 @@
-
-
 #include "05_LineTrace/C03_Teleport.h"
 #include "Components/BoxComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "../Player/CPlayer.h"
+
 AC03_Teleport::AC03_Teleport()
 {
 	Root = CreateDefaultSubobject<USceneComponent>("Root");
@@ -27,6 +26,7 @@ AC03_Teleport::AC03_Teleport()
 void AC03_Teleport::BeginPlay()
 {
 	Super::BeginPlay();
+	
 	OnActorBeginOverlap.AddDynamic(this, &AC03_Teleport::OnBeginOverlap);
 }
 

@@ -23,7 +23,7 @@ AC01_LineTrace::AC01_LineTrace()
 void AC01_LineTrace::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	TArray<AActor*> actors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AC02_Cylinder::StaticClass(), actors);
 
@@ -46,14 +46,14 @@ void AC01_LineTrace::Tick(float DeltaTime)
 	for (AC02_Cylinder* elem : Cylinders)
 	{
 		FVector start = elem->GetActorLocation();
-		FVector end = elem->GetActorLocation();
+		FVector end   = elem->GetActorLocation();
 
 		end.Z += 100;
 
 		FHitResult hitResult;
 
 		bool b = UKismetSystemLibrary::LineTraceSingleByProfile(GetWorld(), start, end, "Pawn", false, IgnoreActors, EDrawDebugTrace::ForOneFrame, hitResult, true);
-
+		
 		if (b) StartJump(hitResult.GetActor());
 	}
 }
@@ -62,6 +62,6 @@ void AC01_LineTrace::StartJump(AActor* InActor)
 {
 	ACPlayer* player = Cast<ACPlayer>(InActor);
 	if (player)
-		player->LaunchCharacter(FVector(0, 0, 500), true, true);
+		player->LaunchCharacter(FVector(0, 0, 700), true, true);
 }
 

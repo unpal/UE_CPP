@@ -1,8 +1,3 @@
-
-#pragma once
-
-#include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
 #pragma once
 
 #include "CoreMinimal.h"
@@ -13,7 +8,7 @@ UCLASS()
 class UE_CPP_API AC01_Sound2D : public AActor
 {
 	GENERATED_BODY()
-
+	
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UBoxComponent* Box;
@@ -24,11 +19,11 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class USoundCue* Sound; // USoundCue : 사운드입니다.
 
-private:
+private :
 	class UAudioComponent* Audio;
 	// UAudioComponent : 사운드를 재생할 수 있는 기능입니다.
 
-public:
+public:	
 	AC01_Sound2D();
 
 protected:

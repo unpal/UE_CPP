@@ -32,13 +32,13 @@ AC01_Sound2D::AC01_Sound2D()
 void AC01_Sound2D::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	OnActorBeginOverlap.AddDynamic(this, &AC01_Sound2D::OnBeginOverlap);
 }
 
 void AC01_Sound2D::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
-	if (!Cast<ACPlayer>(OtherActor)) return;
+	if(!Cast<ACPlayer>(OtherActor)) return;
 
 	if (!Audio)
 	{
@@ -55,3 +55,4 @@ void AC01_Sound2D::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 		else                  Audio->SetPaused(true);
 	}
 }
+
